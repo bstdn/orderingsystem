@@ -10,7 +10,12 @@
 |
 */
 
-
+$hook['pre_system'][] = array(
+    'class' => 'My_autoload_hook',
+    'function' => 'run',
+    'filename' => 'My_autoload_hook.php',
+    'filepath' => 'hooks',
+);
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */

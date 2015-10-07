@@ -13,5 +13,6 @@
 </div>
 <script src="<?=site_url()?>static/bootstrap/js/jquery.min.js"></script>
 <script src="<?=site_url()?>static/bootstrap/js/bootstrap.min.js"></script>
+<script src="<?=site_url()?>static/bootstrap/js/order.js"></script>
 </body>
 </html>

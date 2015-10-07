@@ -9,7 +9,7 @@ require(APPPATH.'views/common/head.php');?>
 <div class="container-fluid">
     <div class="row-fluid">
         <?php require(APPPATH.'views/common/leftbar.php');?>
-        <div class="span10">
+        <div class="span9">
             <?=$content?>
         </div><!--/span-->
     </div><!--/row-->

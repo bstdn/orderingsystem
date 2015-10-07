@@ -10,6 +10,9 @@ define('HOMEBASE', dirname(dirname(__FILE__)) . DS);
 define('TIME_ZONE', 'Asia/Shanghai');
 date_default_timezone_set(TIME_ZONE);
 
+//timestamp
+define('TIMESTAMP', time());
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

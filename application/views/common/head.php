@@ -14,6 +14,14 @@
     <link href="<?=site_url()?>static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?=site_url()?>static/bootstrap/css/fluid.css" rel="stylesheet">
     <link href="<?=site_url()?>static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <script type="text/javascript">
+        var g = {
+            'router': {
+                'class': '<?=$this->router->class?>',
+                'method': '<?=$this->router->method?>'
+            }
+        };
+    </script>
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -27,11 +35,11 @@
             <a class="brand">订餐系统</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li class="active"><a href="/">我要订餐</a></li>
-                    <li><a href="#">订单历史</a></li>
-                    <li><a href="#">商家管理</a></li>
-                    <li><a href="#">菜名管理</a></li>
-                    <li><a href="#">上传管理</a></li>
+                    <li id="nav_home"><a href="<?=site_url('home/index')?>">我要订餐</a></li>
+                    <li id="nav_history"><a href="<?=site_url('history/index')?>">订单历史</a></li>
+                    <li id="nav_business"><a href="<?=site_url('business/index')?>">商家管理</a></li>
+                    <li id="nav_product"><a href="<?=site_url('product/index')?>">菜名管理</a></li>
+                    <li id="nav_attachment"><a href="<?=site_url('attachment/index')?>">上传管理</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
