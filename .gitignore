@@ -1,0 +1,6 @@
+.DS_Store
+.idea
+
+application/config/
+application/cache/
+
