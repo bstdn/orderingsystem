@@ -1,5 +1,15 @@
 <?php
 
+// directory separator
+define('DS', DIRECTORY_SEPARATOR);
+
+// The name of project path
+define('HOMEBASE', dirname(dirname(__FILE__)) . DS);
+
+// 默认时区
+define('TIME_ZONE', 'Asia/Shanghai');
+date_default_timezone_set(TIME_ZONE);
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
