@@ -34,4 +34,25 @@
         <?php endif; ?>
         </tbody>
     </table>
+    <table class="table table-bordered">
+        <caption>
+            商家订单统计
+        </caption>
+        <thead>
+        <tr>
+            <th>商家</th>
+            <th>数量</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if($total_business_list): ?>
+            <?php foreach($total_business_list as $v): ?>
+                <tr>
+                    <td><?=$business_list[$v['business_id']]?></td>
+                    <td><?=$v['sum']?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+        </tbody>
+    </table>
 </div>

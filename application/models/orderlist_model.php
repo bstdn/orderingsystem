@@ -40,6 +40,18 @@ class Orderlist_model extends MY_Model {
         return $result->num_rows() ? $result->result_array() : array();
     }
 
+    public function get_total_business_by_order_id($id) {
+        if(!is_numeric($id)) {
+            return array();
+        }
+        $this->db->select('business_id, COUNT(*) AS sum');
+        $this->db->where('order_id', $id);
+        $this->db->group_by('business_id');
+        $this->db->order_by('sum', 'DESC');
+        $result = $this->db->get($this->_table_name);
+        return $result->num_rows() ? $result->result_array() : array();
+    }
+
     public function check_man($order_id, $man_id) {
         if(!is_numeric($order_id) || !is_numeric($man_id)) {
             return false;

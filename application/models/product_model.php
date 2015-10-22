@@ -82,7 +82,7 @@ class Product_model extends MY_Model {
         return $this->db->count_all_results($this->_table_name);
     }
 
-    public function get_hot($top = 5) {
+    public function get_hot($top = 10) {
         $this->db->select(array('product_name', 'use_num'));
         $this->db->order_by('use_num', 'DESC');
         $result = $this->db->get($this->_table_name, $top);
@@ -126,5 +126,14 @@ class Product_model extends MY_Model {
         }
         $this->db->update($this->_table_name, $data, $where);
         return $this->db->affected_rows();
+    }
+
+    public function delete_by_id($id) {
+        if(!is_numeric($id)) {
+            return false;
+        }
+        $this->db->where('id', $id);
+        $this->db->delete($this->_table_name);
+        return true;
     }
 }

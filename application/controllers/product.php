@@ -33,7 +33,7 @@ class Product extends MY_Controller {
         $pagination_config['first_tag_close'] = '</li>';
         $pagination_config['last_tag_open'] = '<li>';
         $pagination_config['last_tag_close'] = '</li>';
-        $pagination_config['first_url'] = site_url('history/index');
+        $pagination_config['first_url'] = site_url('product/index');
         $pagination_config['cur_tag_open'] = '<li class="active"><a>';
         $pagination_config['cur_tag_close'] = '</a></li>';
         $pagination_config['next_tag_open'] = '<li>';
@@ -71,8 +71,11 @@ class Product extends MY_Controller {
         if(!$product) {
             showmsg('记录不存在');
         }
+        if(!trim($input['product_name'])) {
+            showmsg('商家名称不能为空');
+        }
         $data = array(
-            'product_name' => $input['product_name'],
+            'product_name' => dhtmlspecialchars(trim($input['product_name'])),
         );
         $where = array(
             'id' => $input['id'],
@@ -94,5 +97,18 @@ class Product extends MY_Controller {
             'info' => $product,
         );
         $this->view($data);
+    }
+
+    public function remove_product() {
+        $input = $this->input->get();
+        $product = $this->product->get_by_id($input['id']);
+        if(!$product) {
+            showmsg('菜名不存在');
+        } elseif($product['use_num'] > 0) {
+            showmsg('菜名已使用，不能删除');
+        }
+        $this->product->delete_by_id($input['id']);
+
+        showmsg('操作成功');
     }
 }

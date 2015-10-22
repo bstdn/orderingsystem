@@ -25,6 +25,7 @@ class History extends MY_Controller {
             'offset' => $this->input->get('per_page') ?: '',
         );
         $order = $this->order->query($input);
+        $last_order = $this->order->get_last_order();
 
         $pagination_config['base_url'] = site_url('history/index?limit='.$input['limit']);
         $pagination_config['total_rows'] = array_value($order, 'count', 0);
@@ -50,9 +51,10 @@ class History extends MY_Controller {
         $this->pagination->initialize($pagination_config);
 
         $data = array(
-            'list'  => array_value($order, 'data', array()),
-            'count' => array_value($order, 'count', 0),
-            'input' => $input,
+            'list'       => array_value($order, 'data', array()),
+            'count'      => array_value($order, 'count', 0),
+            'input'      => $input,
+            'last_order' => $last_order,
         );
 
         $this->view($data);
@@ -98,11 +100,13 @@ class History extends MY_Controller {
         $product_ids = array_unique(array_column($order_list, 'product_id'));
         $business_list = $this->business->get_business_by_id($business_ids);
         $product_list = $this->product->get_product_by_id($product_ids);
+        $total_business_list = $this->orderlist->get_total_business_by_order_id($current_order['id']);
         $data = array(
-            'order'         => $current_order,
-            'order_list'    => isset($order_list) ? $order_list : array(),
-            'business_list' => isset($business_list) ? $business_list : array(),
-            'product_list'  => isset($product_list) ? $product_list : array(),
+            'order'               => $current_order,
+            'order_list'          => isset($order_list) ? $order_list : array(),
+            'business_list'       => isset($business_list) ? $business_list : array(),
+            'product_list'        => isset($product_list) ? $product_list : array(),
+            'total_business_list' => isset($total_business_list) ? $total_business_list : array(),
         );
         $this->view($data);
     }
@@ -115,16 +119,35 @@ class History extends MY_Controller {
         $order = $this->order->get_order_by_id($input['id']);
         if(!$order) {
             showmsg('订单不存在');
+        } elseif($order['status'] == 0) {
+            showmsg('订单正在使用，不能删除');
+        } elseif($order['count'] > 0) {
+            showmsg('订单已使用，不能删除');
         }
-        $order_list = $this->orderlist->get_list_by_order_id($order['id']);
-        foreach($order_list as $v) {
-            $this->man->update_use_num($v['man_id'], '-');
-            $this->business->update_use_num($v['business_id'], '-');
-            $this->product->update_use_num($v['product_id'], '-');
-        }
-        $this->orderlist->delete_by_order_id($order['id']);
         $this->order->delete_by_id($order['id']);
 
+        showmsg('操作成功');
+    }
+
+    public function reset_order() {
+        $input = $this->input->get();
+        if(!is_numeric($input['id'])) {
+            showmsg('参数错误');
+        }
+        $order = $this->order->get_order_by_id($input['id']);
+        if(!$order) {
+            showmsg('订单不存在');
+        } elseif($order['status'] == 0) {
+            showmsg('订单正在使用，不能恢复');
+        }
+        $data = array(
+            'endtime' => 0,
+            'status'  => 0,
+        );
+        $where = array(
+            'id' => $input['id'],
+        );
+        $this->order->update($data, $where);
         showmsg('操作成功');
     }
 }

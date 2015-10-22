@@ -14,4 +14,28 @@ $(function() {
         $('#product_name').val(tr_copy_order.children().eq(2).html());
         $('#username').focus();
     });
+
+    //复制商家到表单
+    $('.copy_business').click(function() {
+        var clone = $(this).clone();
+        if(clone.children('span')) {
+            clone.children('span').remove();
+        }
+        $('#business_name').val(clone.html()).focus();
+    });
+
+    //复制菜名到表单
+    $('.copy_product').click(function() {
+        var clone = $(this).clone();
+        if(clone.children('span')) {
+            clone.children('span').remove();
+        }
+        $('#product_name').val(clone.html()).focus();
+    });
+
+    //复制姓名到表单
+    $('.copy_username').click(function() {
+        var clone = $(this).clone();
+        $('#username').val(clone.html()).focus();
+    });
 });

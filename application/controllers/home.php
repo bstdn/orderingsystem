@@ -42,6 +42,10 @@ class Home extends MY_Controller {
     public function order() {
         $input = $this->input->get();
         if($input['book'] == 1) { //开始订餐
+            $current_order = $this->order->get_current_order();
+            if($current_order) {
+                showmsg('订餐已开始');
+            }
             $this->order->start_order();
             showmsg('操作成功');
         } elseif($input['book'] == 2) { //结束订餐
@@ -58,17 +62,17 @@ class Home extends MY_Controller {
         if(!$check_order) {
             showmsg('订单异常');
         }
-        if(!$input['username'] || !$input['business_name'] || !$input['product_name']) {
+        if(!trim($input['username']) || !trim($input['business_name']) || !trim($input['product_name'])) {
             showmsg('姓名、商家、菜名均不能为空');
         }
 
-        $man_id = $this->man->get_man_id($input['username'], $input['order_id']);
+        $man_id = $this->man->get_man_id(dhtmlspecialchars(trim($input['username'])), $input['order_id']);
         $check_man = $this->orderlist->check_man($input['order_id'], $man_id);
         if($check_man === false || (is_array($check_man) && count($check_man) > 0)) {
             showmsg('姓名:'.$input['username'].'已下单');
         }
-        $business_id = $this->business->get_business_id($input['business_name']);
-        $product_id = $this->product->get_product_id($input['product_name']);
+        $business_id = $this->business->get_business_id(dhtmlspecialchars(trim($input['business_name'])));
+        $product_id = $this->product->get_product_id(dhtmlspecialchars(trim($input['product_name'])));
 
         $insert = array(
             'order_id'    => $check_order['id'],
@@ -91,10 +95,13 @@ class Home extends MY_Controller {
         $check_order = $this->order->get_order_by_id($orderlist['order_id']);
         if(!$check_order) {
             showmsg('订单异常');
+        } elseif($check_order['status'] == 1) {
+            showmsg('订单已结束');
         }
 
         $ret = $this->orderlist->delete_by_id($input['id']);
         if($ret) {
+            $this->order->update_count($orderlist['order_id'], '-');
             $this->man->update_use_num($orderlist['man_id'], '-');
             $this->business->update_use_num($orderlist['business_id'], '-');
             $this->product->update_use_num($orderlist['product_id'], '-');

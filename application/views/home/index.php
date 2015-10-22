@@ -82,7 +82,7 @@
                 <?php if($no_order_list): ?>
                     <?php foreach($no_order_list as $k => $v): ?>
                         <tr>
-                            <td><?=$v?></td>
+                            <td><a class="btn-link copy_username" data-toggle="tooltip" data-placement="top" title="" data-original-title="复制姓名到表单!"><?=$v?></a></td>
                             <td>
                                 <a class="label label-info" href="<?=site_url('home/pass_book?id='.$k.'&order_id='.$order['id'].'&type=0')?>" data-toggle="tooltip" data-placement="top" title="" data-original-title="跳过这次订单!">不点</a>
                                 <a class="label label-important" href="<?=site_url('home/pass_book?id='.$k.'&order_id='.$order['id'].'&type=1')?>" data-toggle="tooltip" data-placement="top" title="" data-original-title="以后都不点!">总不点</a>

@@ -16,13 +16,19 @@ class Order_model extends MY_Model {
         return $result->num_rows() ? $result->row_array() : array();
     }
 
+    public function get_last_order() {
+        $this->db->order_by('id', 'DESC');
+        $result = $this->db->get($this->_table_name, 1);
+        return $result->num_rows() ? $result->row_array() : array();
+    }
+
     public function get_list() {
         $this->db->order_by('id', 'DESC');
         $result = $this->db->get($this->_table_name);
         return $result->num_rows() ? $result->result_array() : array();
     }
 
-    public function get_top($top = 5) {
+    public function get_top($top = 10) {
         $this->db->order_by('id', 'DESC');
         $result = $this->db->get($this->_table_name, $top);
         return $result->num_rows() ? $result->result_array() : array();
@@ -91,6 +97,20 @@ class Order_model extends MY_Model {
         $this->db->set('count', 'count'.$opeation.$num, FALSE);
         $this->db->update($this->_table_name);
         return true;
+    }
+
+    public function update($param, $where) {
+        $data = array();
+        foreach($param as $k => $v) {
+            if(!is_null($v)) {
+                $data[$k] = $v;
+            }
+        }
+        if(!$data) {
+            return false;
+        }
+        $this->db->update($this->_table_name, $data, $where);
+        return $this->db->affected_rows();
     }
 
     public function delete_by_id($id) {

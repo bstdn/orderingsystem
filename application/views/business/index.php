@@ -27,6 +27,7 @@
                     <td><?=date('Y-m-d H:i:s', $v['dateline'])?></td>
                     <td>
                         <a class="label label-success" href="<?=site_url('business/edit?id='.$v['id'])?>">编辑</a>
+                        <a class="label label-important" href="<?=site_url('business/remove_business?id='.$v['id'])?>" data-toggle="tooltip" data-placement="top" title="" data-original-title="删除~请谨慎操作!">删除</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

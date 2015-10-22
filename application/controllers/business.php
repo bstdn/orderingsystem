@@ -33,7 +33,7 @@ class Business extends MY_Controller {
         $pagination_config['first_tag_close'] = '</li>';
         $pagination_config['last_tag_open'] = '<li>';
         $pagination_config['last_tag_close'] = '</li>';
-        $pagination_config['first_url'] = site_url('history/index');
+        $pagination_config['first_url'] = site_url('business/index');
         $pagination_config['cur_tag_open'] = '<li class="active"><a>';
         $pagination_config['cur_tag_close'] = '</a></li>';
         $pagination_config['next_tag_open'] = '<li>';
@@ -71,8 +71,11 @@ class Business extends MY_Controller {
         if(!$business) {
             showmsg('记录不存在');
         }
+        if(!trim($input['business_name'])) {
+            showmsg('商家名称不能为空');
+        }
         $data = array(
-            'business_name' => $input['business_name'],
+            'business_name' => dhtmlspecialchars(trim($input['business_name'])),
         );
         $where = array(
             'id' => $input['id'],
@@ -94,5 +97,18 @@ class Business extends MY_Controller {
             'info' => $business,
         );
         $this->view($data);
+    }
+
+    public function remove_business() {
+        $input = $this->input->get();
+        $business = $this->business->get_by_id($input['id']);
+        if(!$business) {
+            showmsg('商家不存在');
+        } elseif($business['use_num'] > 0) {
+            showmsg('商家已使用，不能删除');
+        }
+        $this->business->delete_by_id($input['id']);
+
+        showmsg('操作成功');
     }
 }
